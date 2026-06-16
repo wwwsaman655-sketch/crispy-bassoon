@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>مرکز فرماندهی زندگی | Liquid Glass</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --glass-bg-light: rgba(255, 255, 255, 0.65);
+            --glass-border-light: rgba(255, 255, 255, 0.5);
+            --glass-shadow-light: 0 8px 32px rgba(0, 0, 0, 0.04);
+            --text-primary-light: #1c1c1e;
+            --text-secondary-light: #3a3a3c;
+            --accent-light: #007AFF;
+            --card-bg-light: rgba(255, 255, 255, 0.7);
+            --backdrop-blur: blur(20px);
+            
+            --glass-bg-dark: rgba(28, 28, 30, 0.7);
+            --glass-border-dark: rgba(255, 255, 255, 0.15);
+            --glass-shadow-dark: 0 8px 32px rgba(0, 0, 0, 0.2);
+            --text-primary-dark: #ffffff;
+            --text-secondary-dark: #aeaeb2;
+            --accent-dark: #0A84FF;
+            --card-bg-dark: rgba(44, 44, 46, 0.65);
+            
+            --font-system: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            --radius-lg: 24px;
+            --radius-md: 18px;
+            --radius-sm: 14px;
+            --transition-smooth: all 0.25s cubic-bezier(0.2, 0.9, 0.4, 1);
+            --nav-height: 70px;
+        }
+
+        body {
+            font-family: var(--font-system);
+            background: #f2f2f7;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 12px;
+            transition: background 0.4s ease;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body.dark-mode {
+            background: #000000;
+        }
+
+        .app-frame {
+            max-width: 420px;
+            width: 100%;
+            height: 850px;
+            background: transparent;
+            border-radius: 44px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 30px 50px rgba(0,0,0,0.15), 0 10px 25px rgba(0,0,0,0.1);
+            transition: background 0.3s;
+            display: flex;
+            flex-direction: column;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            background: rgba(242, 242, 247, 0.8);
+            border: 1px solid rgba(255,255,255,0.5);
+        }
+
+        body.dark-mode .app-frame {
+            background: rgba(0, 0, 0, 0.75);
+            box-shadow: 0 30px 50px rgba(0,0,0,0.4);
+            border-color: rgba(255,255,255,0.15);
+        }
+
+        .glass-header {
+            padding: 18px 20px 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: transparent;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-bottom: 0.5px solid rgba(0,0,0,0.05);
+        }
+        body.dark-mode .glass-header {
+            border-bottom-color: rgba(255,255,255,0.1);
+        }
+        .header-title {
+            font-size: 28px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            color: var(--text-primary-light);
+            transition: color 0.3s;
+        }
+        body.dark-mode .header-title {
+            color: var(--text-primary-dark);
+        }
+        .mode-toggle {
+            background: var(--glass-bg-light);
+            backdrop-filter: var(--backdrop-blur);
+            -webkit-backdrop-filter: var(--backdrop-blur);
+            border: 1px solid var(--glass-border-light);
+            border-radius: 30px;
+            padding: 8px 16px;
+            font-weight: 600;
+            font-size: 15px;
+            color: var(--text-primary-light);
+            cursor: pointer;
+            transition: var(--transition-smooth);
+            box-shadow: var(--glass-shadow-light);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        body.dark-mode .mode-toggle {
+            background: var(--glass-bg-dark);
+            border-color: var(--glass-border-dark);
+            color: var(--text-primary-dark);
+            box-shadow: var(--glass-shadow-dark);
+        }
+
+        .main-scroll {
+            flex: 1;
+            overflow-y: auto;
+            padding: 6px 16px 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(0,0,0,0.15) transparent;
+            padding-bottom: 80px;
+        }
+
+        .glass-card {
+            background: var(--card-bg-light);
+            backdrop-filter: var(--backdrop-blur);
+            -webkit-backdrop-filter: var(--backdrop-blur);
+            border-radius: var(--radius-lg);
+            padding: 18px 16px;
+            border: 1px solid var(--glass-border-light);
+            box-shadow: var(--glass-shadow-light);
+            transition: var(--transition-smooth);
+            color: var(--text-primary-light);
+            animation: fadeSlide 0.3s ease;
+        }
+        body.dark-mode .glass-card {
+            background: var(--card-bg-dark);
+            border-color: var(--glass-border-dark);
+            box-shadow: var(--glass-shadow-dark);
+            color: var(--text-primary-dark);
+        }
+
+        @keyframes fadeSlide {
+            0% { opacity: 0; transform: translateY(8px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        .section-title {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 14px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            letter-spacing: -0.3px;
+        }
+
+        .progress-badge {
+            background: rgba(0, 122, 255, 0.15);
+            color: #007AFF;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+        body.dark-mode .progress-badge {
+            background: rgba(10, 132, 255, 0.25);
+            color: #0A84FF;
+        }
+
+        .grid-2col {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .stat-value {
+            font-size: 28px;
+            font-weight: 750;
+            letter-spacing: -0.8px;
+            margin: 6px 0;
+        }
+        .stat-label {
+            font-size: 14px;
+            opacity: 0.7;
+        }
+
+        .widget-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 0.5px solid rgba(0,0,0,0.08);
+        }
+        body.dark-mode .widget-row {
+            border-bottom-color: rgba(255,255,255,0.1);
+        }
+        .widget-row:last-child {
+            border-bottom: none;
+        }
+
+        .priority-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 10px;
+            background: #FF9500;
+            display: inline-block;
+            margin-left: 6px;
+        }
+
+        button {
+            background: rgba(0,122,255,0.1);
+            border: none;
+            border-radius: 20px;
+            padding: 8px 14px;
+            font-weight: 600;
+            color: #007AFF;
+            cursor: pointer;
+            transition: 0.2s;
+            font-size: 14px;
+            font-family: var(--font-system);
+        }
+        button:active { transform: scale(0.96); background: rgba(0,122,255,0.2); }
+        body.dark-mode button {
+            color: #0A84FF;
+            background: rgba(10,132,255,0.2);
+        }
+
+        .nav-bar {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: var(--nav-height);
+            background: rgba(242,242,247,0.8);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            border-top: 0.5px solid rgba(0,0,0,0.1);
+            padding-bottom: 8px;
+            z-index: 10;
+        }
+        body.dark-mode .nav-bar {
+            background: rgba(28,28,30,0.8);
+            border-top-color: rgba(255,255,255,0.15);
+        }
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            font-size: 11px;
+            color: #8e8e93;
+            transition: 0.2s;
+            cursor: pointer;
+            padding: 6px 10px;
+            border-radius: 20px;
+        }
+        .nav-item.active {
+            color: #007AFF;
+            background: rgba(0,122,255,0.1);
+        }
+        body.dark-mode .nav-item.active {
+            color: #0A84FF;
+            background: rgba(10,132,255,0.2);
+        }
+        .nav-icon {
+            font-size: 22px;
+        }
+
+        .hidden-page {
+            display: none !important;
+        }
+        .page {
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+        }
+    </style>
+</head>
+<body class="light-mode">
+    <div class="app-frame">
+        <div class="glass-header">
+            <span class="header-title" id="pageTitle">✨ امروز من</span>
+            <div class="mode-toggle" id="modeToggle">
+                <span id="modeIcon">🌙</span> <span>تاریک</span>
+            </div>
+        </div>
+
+        <div class="main-scroll" id="mainContent">
+            <!-- صفحات مختلف اینجا بارگذاری می‌شوند -->
+        </div>
+
+        <div class="nav-bar">
+            <div class="nav-item active" data-page="today">
+                <span class="nav-icon">📊</span>
+                <span>امروز</span>
+            </div>
+            <div class="nav-item" data-page="finance">
+                <span class="nav-icon">💰</span>
+                <span>مالی</span>
+            </div>
+            <div class="nav-item" data-page="business">
+                <span class="nav-icon">📈</span>
+                <span>کسب‌وکار</span>
+            </div>
+            <div class="nav-item" data-page="goals">
+                <span class="nav-icon">🎯</span>
+                <span>اهداف</span>
+            </div>
+            <div class="nav-item" data-page="notes">
+                <span class="nav-icon">📝</span>
+                <span>یادداشت</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        (function() {
+            // ---------- State ----------
+            const todayData = {
+                income: 2450000,
+                expense: 870000,
+                tasks: 8,
+                invoices: 3,
+                checksDue: 1,
+                goalsProgress: 72,
+                notes: 4,
+                monthProgress: 64,
+                lastMonthIncome: 2100000,
+                lastMonthExpense: 920000,
+                activeCustomers: 27,
+                topProduct: "کیف چرم",
+                pendingTasks: 3,
+                walletBalance: 15600000,
+                bankBalance: 48700000,
+                debt: 3200000,
+                credit: 5800000,
+                monthlyBudget: 15000000,
+                spentBudget: 8700000,
+            };
+
+            const businessData = {
+                customers: [
+                    {name: "امیر حسینی", phone:"09121234567", debt:1200000, lastBuy:"1402/12/15"},
+                    {name: "سارا محمدی", phone:"09361239876", debt:0, lastBuy:"1403/01/20"}
+                ],
+                suppliers: ["چرم نگین", "تولیدی نوین"],
+                inventory: [
+                    {name:"کیف چرم", stock:23, buyPrice:450000, sellPrice:780000},
+                    {name:"کمربند", stock:5, buyPrice:120000, sellPrice:220000}
+                ],
+                recentInvoices: 4
+            };
+
+            const goalsData = {
+                daily: 3,
+                weekly: 5,
+                monthly: 85,
+                yearly: 42,
+                financialGoal: 120000000,
+                currentFinancial: 87000000
+            };
+
+            let currentPage = 'today';
+
+            // ---------- DOM Elements ----------
+            const mainContent = document.getElementById('mainContent');
+            const pageTitle = document.getElementById('pageTitle');
+            const modeToggle = document.getElementById('modeToggle');
+            const modeIcon = document.getElementById('modeIcon');
+            const navItems = document.querySelectorAll('.nav-item');
+
+            // ---------- Helper to create card HTML ----------
+            function card(content, extraClass='') {
+                return `<div class="glass-card ${extraClass}">${content}</div>`;
+            }
+
+            // ---------- Render Pages ----------
+            function renderTodayPage() {
+                const incPercent = ((todayData.income - todayData.lastMonthIncome)/todayData.lastMonthIncome*100).toFixed(1);
+                const expPercent = ((todayData.lastMonthExpense - todayData.expense)/todayData.lastMonthExpense*100).toFixed(1);
+                const isDark = document.body.classList.contains('dark-mode');
+                const textClr = isDark ? 'var(--text-primary-dark)' : 'var(--text-primary-light)';
+                
+                return `
+                <div class="page" id="page-today">
+                    ${card(`
+                        <div class="section-title">📊 خلاصه مالی امروز</div>
+                        <div class="grid-2col">
+                            <div>
+                                <div class="stat-label">درآمد امروز</div>
+                                <div class="stat-value" style="color: #34C759;">${todayData.income.toLocaleString()} تومان</div>
+                            </div>
+                            <div>
+                                <div class="stat-label">هزینه امروز</div>
+                                <div class="stat-value" style="color: #FF3B30;">${todayData.expense.toLocaleString()} تومان</div>
+                            </div>
+                        </div>
+                        <div style="margin-top: 12px; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px;">
+                            <span>💼 فاکتورها: <strong>${todayData.invoices}</strong></span>
+                            <span>📅 چک سررسید: <strong>${todayData.checksDue}</strong></span>
+                            <span>📦 کالاهای کم: <strong>2</strong></span>
+                        </div>
+                    `)}
+                    ${card(`
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <span style="font-size: 28px;">🚀</span>
+                            <div>
+                                <div style="font-weight: 700; font-size: 18px;">امروز چقدر جلوتر از دیروز هستم؟</div>
+                                <div style="font-size: 15px; margin-top: 4px;">
+                                    درآمد <strong style="color: #34C759;">+${incPercent}%</strong> | هزینه <strong style="color: #34C759;">-${expPercent}%</strong>
+                                </div>
+                            </div>
+                        </div>
+                    `)}
+                    ${card(`
+                        <div class="section-title">🎯 کارهای امروز</div>
+                        <div class="widget-row"><span><span class="priority-dot"></span> تکمیل فاکتور مشتری ویژه</span><span class="progress-badge">اولویت</span></div>
+                        <div class="widget-row"><span>📦 بررسی موجودی انبار</span><span>⏳</span></div>
+                        <div class="widget-row"><span>💰 واریز به حساب اصلی</span><span>✓</span></div>
+                        <div style="margin-top: 12px;">
+                            <span>🎯 پیشرفت هدف ماهانه: <strong>${todayData.goalsProgress}%</strong></span>
+                            <div style="background:#E5E5EA; height:6px; border-radius:10px; margin-top:6px;">
+                                <div style="width:${todayData.goalsProgress}%; height:6px; background:#007AFF; border-radius:10px;"></div>
+                            </div>
+                        </div>
+                    `)}
+                    ${card(`
+                        <div class="section-title">📈 پیشرفت ماه</div>
+                        <div class="grid-2col">
+                            <div><span>درآمد ماه</span><div class="stat-value" style="font-size:20px;">12.8M</div></div>
+                            <div><span>سود خالص</span><div class="stat-value" style="font-size:20px;">4.2M</div></div>
+                        </div>
+                        <div style="height:60px; background: linear-gradient(90deg, #007AFF30, #007AFF80); border-radius:16px; margin-top:8px; display:flex; align-items:center; justify-content:center; color:#007AFF;">نمودار جریان پول</div>
+                    `)}
+                </div>`;
+            }
+
+            function renderFinancePage() {
+                return `
+                <div class="page" id="page-finance">
+                    ${card(`
+                        <div class="section-title">💳 کیف پول و حساب‌ها</div>
+                        <div class="widget-row"><span>کیف پول اصلی</span><strong>${todayData.walletBalance.toLocaleString()} تومان</strong></div>
+                        <div class="widget-row"><span>بانک ملی</span><strong>${todayData.bankBalance.toLocaleString()} تومان</strong></div>
+                        <button style="margin-top:8px;">+ ثبت درآمد / هزینه</button>
+                    `)}
+                    ${card(`
+                        <div class="section-title">📋 بدهی و طلب</div>
+                        <div class="widget-row"><span>بدهکاری به تامین‌کننده</span><strong style="color:#FF3B30;">${todayData.debt.toLocaleString()}</strong></div>
+                        <div class="widget-row"><span>طلب از مشتری</span><strong style="color:#34C759;">${todayData.credit.toLocaleString()}</strong></div>
+                    `)}
+                    ${card(`
+                        <div class="section-title">📊 بودجه‌بندی ماهانه</div>
+                        <span>بودجه: ${todayData.monthlyBudget.toLocaleString()} | مصرف: ${todayData.spentBudget.toLocaleString()}</span>
+                        <div style="background:#E5E5EA; height:8px; border-radius:10px; margin-top:8px;">
+                            <div style="width:${(todayData.spentBudget/todayData.monthlyBudget*100)}%; height:8px; background:#FF9500; border-radius:10px;"></div>
+                        </div>
+                    `)}
+                </div>`;
+            }
+
+            function renderBusinessPage() {
+                return `
+                <div class="page" id="page-business">
+                    ${card(`
+                        <div class="section-title">🧾 فاکتورها</div>
+                        <div class="widget-row"><span>فاکتور فروش امروز</span><strong>${todayData.invoices} عدد</strong></div>
+                        <button style="margin-top:6px;">🖨️ چاپ فاکتور حرفه‌ای</button>
+                    `)}
+                    ${card(`
+                        <div class="section-title">👥 مشتریان فعال</div>
+                        <div class="widget-row"><span>${businessData.customers[0].name}</span><span>بدهی: ${businessData.customers[0].debt.toLocaleString()}</span></div>
+                        <div class="widget-row"><span>${businessData.customers[1].name}</span><span>تسویه</span></div>
+                    `)}
+                    ${card(`
+                        <div class="section-title">📦 انبار و کالا</div>
+                        <div class="widget-row"><span>${businessData.inventory[0].name}</span><span>موجودی: ${businessData.inventory[0].stock} | سود: ${(businessData.inventory[0].sellPrice - businessData.inventory[0].buyPrice).toLocaleString()}</span></div>
+                        <div class="widget-row"><span>${businessData.inventory[1].name}</span><span style="color:#FF3B30;">کمبود! (${businessData.inventory[1].stock})</span></div>
+                    `)}
+                </div>`;
+            }
+
+            function renderGoalsPage() {
+                return `
+                <div class="page" id="page-goals">
+                    ${card(`
+                        <div class="section-title">🎯 اهداف روزانه/هفتگی</div>
+                        <div class="widget-row"><span>روزانه</span><span>${goalsData.daily}/5 انجام شده</span></div>
+                        <div class="widget-row"><span>هفتگی</span><span>${goalsData.weekly}/8</span></div>
+                    `)}
+                    ${card(`
+                        <div class="section-title">📅 اهداف ماهانه/سالانه</div>
+                        <div class="widget-row"><span>ماهانه</span><span>${goalsData.monthly}%</span></div>
+                        <div class="widget-row"><span>سالانه</span><span>${goalsData.yearly}%</span></div>
+                    `)}
+                    ${card(`
+                        <div class="section-title">💰 هدف مالی</div>
+                        <span>جمع‌آوری ${goalsData.financialGoal.toLocaleString()} تومان</span>
+                        <div style="background:#E5E5EA; height:8px; border-radius:10px; margin-top:8px;">
+                            <div style="width:${(goalsData.currentFinancial/goalsData.financialGoal*100)}%; height:8px; background:#34C759; border-radius:10px;"></div>
+                        </div>
+                        <span style="font-size:13px;">${(goalsData.currentFinancial/goalsData.financialGoal*100).toFixed(1)}% تکمیل شده</span>
+                    `)}
+                </div>`;
+            }
+
+            function renderNotesPage() {
+                return `
+                <div class="page" id="page-notes">
+                    ${card(`
+                        <div class="section-title">📝 یادداشت‌های امروز</div>
+                        <div class="widget-row"><span>📌 بررسی قیمت مواد اولیه</span><span>جدید</span></div>
+                        <div class="widget-row"><span>✅ چک لیست روزانه</span><span>3/7</span></div>
+                    `)}
+                    ${card(`
+                        <div class="section-title">💡 دفتر ایده‌ها</div>
+                        <p style="opacity:0.8;">• راه‌اندازی فروش آنلاین</p>
+                        <p style="opacity:0.8;">• تخفیف ویژه مشتریان قدیمی</p>
+                    `)}
+                    ${card(`
+                        <div class="section-title">📅 برنامه‌های آینده</div>
+                        <p style="opacity:0.8;">جلسه با تامین‌کننده جدید - ۳ روز دیگر</p>
+                    `)}
+                </div>`;
+            }
+
+            function loadPage(page) {
+                currentPage = page;
+                switch(page) {
+                    case 'today':
+                        pageTitle.textContent = '✨ امروز من';
+                        mainContent.innerHTML = renderTodayPage();
+                        break;
+                    case 'finance':
+                        pageTitle.textContent = '💰 مدیریت مالی';
+                        mainContent.innerHTML = renderFinancePage();
+                        break;
+                    case 'business':
+                        pageTitle.textContent = '📈 کسب‌وکار و انبار';
+                        mainContent.innerHTML = renderBusinessPage();
+                        break;
+                    case 'goals':
+                        pageTitle.textContent = '🎯 اهداف و پیگیری';
+                        mainContent.innerHTML = renderGoalsPage();
+                        break;
+                    case 'notes':
+                        pageTitle.textContent = '📝 یادداشت‌ها';
+                        mainContent.innerHTML = renderNotesPage();
+                        break;
+                }
+                // به‌روزرسانی نویگیشن فعال
+                navItems.forEach(item => {
+                    item.classList.remove('active');
+                    if(item.dataset.page === page) item.classList.add('active');
+                });
+            }
+
+            // حالت تاریک/روشن
+            function toggleDarkMode() {
+                document.body.classList.toggle('dark-mode');
+                const isDark = document.body.classList.contains('dark-mode');
+                modeIcon.textContent = isDark ? '☀️' : '🌙';
+                modeToggle.querySelector('span:last-child').textContent = isDark ? 'روشن' : 'تاریک';
+                // بازخوانی صفحه فعلی برای اعمال رنگ‌ها
+                loadPage(currentPage);
+            }
+
+            // Event Listeners
+            modeToggle.addEventListener('click', toggleDarkMode);
+
+            navItems.forEach(item => {
+                item.addEventListener('click', (e) => {
+                    const page = e.currentTarget.dataset.page;
+                    if(page) loadPage(page);
+                });
+            });
+
+            // بارگذاری اولیه
+            loadPage('today');
+
+            // برای انیمیشن‌های نرم اضافی
+            document.querySelectorAll('.glass-card').forEach(card => {
+                card.addEventListener('touchstart', function() {
+                    this.style.transform = 'scale(0.98)';
+                });
+                card.addEventListener('touchend', function() {
+                    this.style.transform = 'scale(1)';
+                });
+            });
+        })();
+    </script>
+</body>
+</html>
